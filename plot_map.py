@@ -23,11 +23,19 @@ for key in redis_db.conn.scan_iter():
     lng = temp["geo"]["lng"]
     rate = temp["rate"]
     color = get_color(rate)
-    folium.RegularPolygonMarker(
+    # folium.RegularPolygonMarker(
+    #     location=[lat, lng],
+    #     popup=str(rate) + " $/sqft",
+    #     fill_color=color,
+    #     number_of_sides=20,
+    #     radius=4
+    # ).add_to(map_sf)
+    folium.CircleMarker(
         location=[lat, lng],
         popup=str(rate) + " $/sqft",
+        fill_opacity=1,
         fill_color=color,
-        number_of_sides=20,
+        color="black",
         radius=4
     ).add_to(map_sf)
 
