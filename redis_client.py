@@ -47,7 +47,7 @@ class redis_client():
             return
 
         try:
-            return self.conn.get(key)
+            return json.loads(self.conn.get(key))
         except Exception as ex:
             print "Error: ", ex
             exit("Failed to find, terminating.")
