@@ -42,5 +42,5 @@ map_sf.save('map.html')
 
 # heatmap
 heatmap_sf = folium.Map([lat_sf, lng_sf], tiles='stamentoner', zoom_start=13)
-HeatMap(data).add_to(heatmap_sf)
+HeatMap(data, radius=20, blur=25, gradient={0.6: 'blue', 0.7: 'green', 0.8: 'lime', 0.9: 'red'}).add_to(heatmap_sf)
 heatmap_sf.save('heatmap.html')
