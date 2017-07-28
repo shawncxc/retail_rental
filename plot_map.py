@@ -56,8 +56,8 @@ for key in redis_db.conn.scan_iter():
 HeatMap(heatmap_data, radius=20, blur=25, gradient={0.6: "blue", 0.7: "green", 0.8: "lime", 0.9: "red"}).add_to(heatmap_sf)
 
 # export regular map
-map_sf.save("map.html")
+map_sf.save("./html/map.html")
 # export heatmap
-heatmap_sf.save("heatmap.html")
+heatmap_sf.save("./html/heatmap.html")
 # export map includes everything
-map_all.save("map_all.html")
+map_all.save("./html/map_all.html")
