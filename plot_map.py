@@ -20,14 +20,29 @@ lng_sf = -122.4184106
 
 # regular map
 map_sf = folium.Map(location=[lat_sf, lng_sf], zoom_start=13)
+# heatmap
+heatmap_sf = folium.Map([lat_sf, lng_sf], tiles="stamentoner", zoom_start=13)
+# map includes everything
+map_all = folium.Map(location=[lat_sf, lng_sf], zoom_start=13)
+
 redis_db = redis_client()
 redis_db.connect()
-data = []
+heatmap_data = []
 for key in redis_db.conn.scan_iter():
     temp = redis_db.get(key)
+    address = temp["address"]
     lat = temp["geo"]["lat"]
     lng = temp["geo"]["lng"]
     rate = temp["rate"]
+    folium.CircleMarker(
+        location=[lat, lng],
+        popup=address,
+        fill_opacity=1,
+        fill_color="#66cd00",
+        color="black",
+        radius=4
+    ).add_to(map_all)
+    if rate == 0: continue
     color = get_color(rate)
     folium.CircleMarker(
         location=[lat, lng],
@@ -37,10 +52,12 @@ for key in redis_db.conn.scan_iter():
         color="black",
         radius=4
     ).add_to(map_sf)
-    data.append([lat, lng, rate])
-map_sf.save('map.html')
+    heatmap_data.append([lat, lng, rate])
+HeatMap(heatmap_data, radius=20, blur=25, gradient={0.6: "blue", 0.7: "green", 0.8: "lime", 0.9: "red"}).add_to(heatmap_sf)
 
-# heatmap
-heatmap_sf = folium.Map([lat_sf, lng_sf], tiles='stamentoner', zoom_start=13)
-HeatMap(data, radius=20, blur=25, gradient={0.6: 'blue', 0.7: 'green', 0.8: 'lime', 0.9: 'red'}).add_to(heatmap_sf)
-heatmap_sf.save('heatmap.html')
+# export regular map
+map_sf.save("map.html")
+# export heatmap
+heatmap_sf.save("heatmap.html")
+# export map includes everything
+map_all.save("map_all.html")

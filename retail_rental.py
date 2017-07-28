@@ -66,14 +66,16 @@ def main():
             headers={
                 "X-Requested-With": "XMLHttpRequest",
                 "User-agent": str(ua.chrome),
-                "Cookie": "ASP.NET_SessionId=yx20ngzb0iiayby222iqd1zs; __RequestVerificationToken_L2NvbnQ1=LG0vg6Pft7K_JfdxMgJUjB5ZOVB1v5gFDUrzOrf6xDSNKkzhEc29S8bDrMxZVtMjQ_FwmAzM8ZW_t4_KOcONp7hz13w1; __gads=ID=381ce439b3775cb8:T=1500843877:S=ALNI_MZlNI0ceFgtFFjnsekWtSih2ZlH9Q; .CF=CAE0BCC0EA4A682F202F54C151F358801EA45E1A8D5ADD5041A452E2930125519F0830B491178FB1D744E94CBD2EE91C2234DD04F4D28F6017D913045A1775D947ABBD776924248D4CB18B01B242DEC2CC0D113AE7D5423A3A9D8517DD1D2EFE69111563476E0F2ECF40730BDC675DF0E9E8770D; _ga=GA1.2.1412147200.1500843837; _gid=GA1.2.1222583686.1500843837; _gat=1; optimizelySegments=%7B%7D; optimizelyBuckets=%7B%7D; optimizelyPendingLogEvents=%5B%5D; optimizelyEndUserId=oeu1500843837093r0.7755104035737768"
+                "Cookie": "ASP.NET_SessionId=yx20ngzb0iiayby222iqd1zs; __RequestVerificationToken_L2NvbnQ1=LG0vg6Pft7K_JfdxMgJUjB5ZOVB1v5gFDUrzOrf6xDSNKkzhEc29S8bDrMxZVtMjQ_FwmAzM8ZW_t4_KOcONp7hz13w1; __gads=ID=381ce439b3775cb8:T=1500843877:S=ALNI_MZlNI0ceFgtFFjnsekWtSih2ZlH9Q; .CF=0ABAB907D25937458DA9A4410396F7A604286F6393032C9309D079698C7B880BEA49EF188C75C870E9BA098C14992FC4F8FC27D56282219BB9FE26C73CA0DC597F162327F560F18AC6ED7C1A18BE4FB69D6A209C6C451C76482EFCFE72042D7BC18034E2DC244582F8E7000BE7FC2CB536750CDC; _gat=1; optimizelySegments=%7B%7D; optimizelyBuckets=%7B%7D; optimizelyPendingLogEvents=%5B%5D; optimizelyEndUserId=oeu1500843837093r0.7755104035737768; _ga=GA1.2.1412147200.1500843837; _gid=GA1.2.1596952242.1501203239"
             }
         )
         res = json.loads(req.text)
 
-        if isSanFrancisco(res) & hasRate(res):
+        if isSanFrancisco(res):
             redis_id = "retail_rental_{}".format(id)
-            rate = res["Offer"]["YearlyRentMinPerSf"]
+            rate = 0
+            if hasRate(res):
+                rate = res["Offer"]["YearlyRentMinPerSf"]
             address = res["Location"]["PropertyAddress"]["Address"]
             geo = res["Location"]["PropertyAddress"]["GeoLocation"]
             record = {
