@@ -9,12 +9,15 @@ def get_records(start_page=1, end_page=10, redis_db=None):
     ua = UserAgent()
     session = requests.Session()
     for page in range(start_page, end_page + 1):
+        print "==============={}==============".format(str(page))
         req = session.get(
             "https://42floors.com/office-space/us/ca/san-francisco/{}?max=&min=&type=Lease&uses=17".format(str(page)),
             headers={"Content-Type": "application/json", "User-agent": str(ua.chrome)}
         )
         text = req.text
         divs = re.findall('<div class="uniformRow uniformRow-listing "(.+?)>', text)
+        old_divs = re.findall('<div class="uniformRow uniformRow-listing  archived"(.+?)>', text)
+        divs = divs + old_divs
         for div in divs:
             link = re.findall('data-href="(.+?)"', div)[0]
             address = re.findall('/us/ca/san-francisco/(.+?)\\?listing', link)[0]
