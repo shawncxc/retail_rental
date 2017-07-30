@@ -53,7 +53,7 @@ for key in redis_db.conn.scan_iter():
         radius=4
     ).add_to(map_sf)
     heatmap_data.append([lat, lng, rate])
-HeatMap(heatmap_data, radius=20, blur=25, gradient={0.6: "blue", 0.7: "green", 0.8: "lime", 0.9: "red"}).add_to(heatmap_sf)
+HeatMap(heatmap_data, radius=15, blur=25, gradient={0.6: "blue", 0.7: "green", 0.8: "lime", 0.9: "red"}).add_to(heatmap_sf)
 
 # export regular map
 map_sf.save("./html/map.html")
